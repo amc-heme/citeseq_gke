@@ -1,0 +1,167 @@
+import glob
+from itertools import chain
+
+""" Snakemake rules for running STARsolo on 10X data """
+
+""" Extract per-sample fastq paths """
+def _get_fq_paths(wildcards):
+    try:
+      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == wildcards.lib) & (SAMPLES_DF.capture == wildcards.sample)]
+    except AttributeError:
+      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
+
+    fqs = map(lambda x: os.path.join(DATA, x + "*R1*"), samples_filtered.fastqs)
+    fqs = map(lambda x: glob.glob(x), fqs)
+    fqs = list(chain.from_iterable(fqs))
+    
+    return fqs
+
+def _get_fq_count(wildcards):
+    return len(_get_fq_paths(wildcards))
+
+""" Extract per-sample 10X chemistry versions from gex libs """
+def _get_chem_version(wildcards):
+    chem_version = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample].chemistry.unique()
+    if chem_version == "chromiumV3":
+        return [WHITELIST_V3,"--soloUMIlen 12"]
+    elif chem_version == "chromiumV2":
+        return WHITELIST_V2
+
+""" Extract per-sample TotalSeq versions for adt/hto libs """
+def _get_truseq_version(wildcards):
+    try:
+      if wildcards.lib == "adt":
+        truseq_version = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample].truseq_adt.unique()
+      elif wildcards.lib == "hto":
+        truseq_version = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample].truseq_hto.unique()
+      if truseq_version == "A":
+        return "--clip3pNbases"
+      elif truseq_version == "B":
+        return "--clip5pNbases"
+    except AttributeError:
+      pass
+
+""" Extract per-capture targeted for gex libs """
+def _get_cells_targeted(wildcards):
+    captures_filtered = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample]
+    arg_list = list(captures_filtered.cells_targeted.unique())
+    arg_list.append("0.99 10 45000 90000 500 0.01 20000 0.01 10000")
+    arg_list = ' '.join([str(elem) for elem in arg_list])
+    return arg_list
+    
+""" Extract per-sample extra arguments for gex libs """
+def _get_extra_args(wildcards):
+    captures_filtered = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample]
+    return list(captures_filtered.extra_args.unique())
+
+ruleorder: starsolo_gex_counts > starsolo_feature > starsolo_gex > starsolo_gex_bam
+
+""" This rule is now only necessary for adt/hto libraries """
+rule cutadapt_feature:
+    input:
+      _get_fq_paths
+    output:
+      R1 = temp(RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R1.fastq.gz"),
+      R2 = temp(RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R2.fastq.gz")
+    params:
+      job_name = "cutadapt",
+      fq_count = _get_fq_count,
+      memory = "select[mem>32 && hname!=compute08] rusage[mem=32]"
+    log: "logs/{sample}_cutadapt_{lib}.out"
+    threads: 24
+    conda: "env_files/cutadapt.yml"
+    shell:
+      """
+      cutadapt -j 24 -l 25 \
+        -o {output.R2} \
+        <(zcat $(echo {input} | sed 's/R1/R2/g'))
+      
+      if [[ {params.fq_count} == 1 ]]
+      then
+        ln -s {input} {output.R1}
+      else
+        gunzip -c {input} | gzip -c > {output.R1}
+      fi
+      """
+
+""" This rule processes chromium V2/V3 feature libraries with STARsolo """
+rule starsolo_feature:
+    input:
+      R1 = RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R1.fastq.gz",
+      R2 = RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R2.fastq.gz"
+    output:
+      RESULTS+"/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats"
+    params:
+      chemistry = _get_chem_version,
+      truseq = _get_truseq_version,
+      out_dir = RESULTS+"/{lib}/{sample}/{sample}_", 
+      job_name = "star_feature",
+      memory = "select[mem>16 && hname!=compute08] rusage[mem=16]"
+    log: "logs/{sample}_star_{lib}.out"
+    resources:
+      total_impact = 1
+    threads: 12
+    conda: "env_files/star.yml"
+    shell:
+      """
+      {STAR} --soloType CB_UMI_Simple \
+      --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts \
+      --soloUMIfiltering MultiGeneUMI \
+      --soloUMIdedup 1MM_Directional \
+      --readFilesCommand gunzip -c \
+      --runThreadN 12 \
+      --outSAMtype None \
+      --soloBarcodeReadLength 0 \
+      --soloCBwhitelist {params.chemistry} \
+      {params.truseq} 10 \
+      --genomeDir {FEATURE_INDEX} \
+      --soloCellFilter None \
+      --outFileNamePrefix {params.out_dir} \
+      --readFilesIn {input.R2} {input.R1}
+      
+      find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
+      | grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
+      """
+
+""" This rule processes chromium V2/V3 gex libraries with STARsolo """
+rule starsolo_gex_counts:
+    input:
+      R1 = _get_fq_paths
+    output:
+      RESULTS+"/gex/{sample}/{sample}_Solo.out/Barcodes.stats"
+    params:
+      chemistry = _get_chem_version,
+      out_dir = RESULTS+"/gex/{sample}/{sample}_",
+      cells = _get_cells_targeted,
+      extra_args = _get_extra_args,
+      job_name = "star_gex_counts",
+      memory = "select[mem>32 && hname!=compute02 && hname!=compute08 && hname!=compute19 && hname!=compute20] rusage[mem=32]"
+    log: "logs/{sample}_star_gex_counts.out"
+    resources:
+      total_impact = 1
+    threads: 14
+    conda: "env_files/star.yaml"
+    shell:
+      """
+      {STAR} --soloType CB_UMI_Simple \
+      --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts \
+      --soloUMIfiltering MultiGeneUMI \
+      --soloUMIdedup 1MM_Directional \
+      --readFilesCommand gunzip -c \
+      --runThreadN 12 \
+      --soloBarcodeReadLength 0 \
+      --outFilterScoreMin 30 \
+      --soloCBwhitelist {params.chemistry} \
+      --genomeDir {GEX_INDEX} \
+      --clipAdapterType CellRanger4 \
+      --soloFeatures Gene SJ Velocyto \
+      --soloCellFilter EmptyDrops_CR {params.cells} {params.extra_args} \
+      --limitOutSJcollapsed 2000000 \
+      --outFileNamePrefix {params.out_dir} \
+      --outSAMtype None \
+      --readFilesIn $(echo {input.R1} | sed 's/ /,/g;s/R1/R2/g') $(echo {input.R1} | sed 's/ /,/g')
+      
+      find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
+      | grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
+      """
+

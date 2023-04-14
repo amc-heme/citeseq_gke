@@ -1,0 +1,35 @@
+# config file for citeseq snakemake pipeline
+
+# directory
+DATA:
+    "/pbmc_test/data"
+
+# results directory
+RESULTS:
+    "/pbmc_test/results"
+
+GEX_INDEX:
+    "/pbmc_test/ref/cr2020A_star"
+
+FEATURE_INDEX:
+    "/pbmc_test/ref/Features_20221123_star"
+
+WHITELIST_V3:
+    "/pbmc_test/ref/3M-february-2018.txt"
+
+WHITELIST_V2:
+    "/pbmc_test/ref/737K-august-2016.txt"
+
+# TSV relating all sequenced libraries to sane capture names
+FASTQS:
+    "/pbmc_test/example_fastqs.tsv"
+    
+# TSV with per-capture metadata and sample ID
+CAPTURES:
+    "/pbmc_test/example_captures.tsv"
+
+GEX:
+    - R030_1
+
+ADT:
+   - R030_1
