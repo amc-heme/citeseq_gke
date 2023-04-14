@@ -26,8 +26,8 @@ FASTQS = SAMPLES_DF.fastqs
 rule all:
     input:
       # generate gex counts (no BAM)
-      expand("{results}/gex/{sample}/{sample}_Solo.out/Barcodes.stats", results = RESULTS, sample = GEX),
+      expand("{results}/gex/{sample}/{sample}_Solo.out/Barcodes.stats", results = RESULTS, sample = GEX)
       # generate adt counts
-      expand("{results}/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats", results = RESULTS, sample = ADT, lib = "adt")
+      #expand("{results}/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats", results = RESULTS, sample = ADT, lib = "adt")
 
 include: "rules/cutadapt_star.snake"
