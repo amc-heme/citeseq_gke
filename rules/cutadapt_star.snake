@@ -54,7 +54,7 @@ def _get_extra_args(wildcards):
     captures_filtered = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample]
     return list(captures_filtered.extra_args.unique())
 
-ruleorder: starsolo_gex_counts > starsolo_feature > starsolo_gex > starsolo_gex_bam
+ruleorder: starsolo_gex_counts > starsolo_feature 
 
 """ This rule is now only necessary for adt/hto libraries """
 rule cutadapt_feature:
