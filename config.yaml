@@ -9,16 +9,16 @@ RESULTS:
     "/pbmc_test/results"
 
 GEX_INDEX:
-    "/pbmc_test/ref/cr2020A_star"
+    "/ref/cr2020A_star"
 
 FEATURE_INDEX:
-    "/pbmc_test/ref/Features_20221123_star"
+    "/ref/Features_20221123_star"
 
 WHITELIST_V3:
-    "/pbmc_test/ref/3M-february-2018.txt"
+    "/ref/3M-february-2018.txt"
 
 WHITELIST_V2:
-    "/pbmc_test/ref/737K-august-2016.txt"
+    "/ref/737K-august-2016.txt"
 
 # TSV relating all sequenced libraries to sane capture names
 FASTQS:
@@ -29,7 +29,7 @@ CAPTURES:
     "example_captures.tsv"
 
 GEX:
-    - R030_1
+    - pbmc
 
 ADT:
-   - R030_1
+    - pbmc
