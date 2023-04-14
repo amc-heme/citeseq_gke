@@ -10,7 +10,7 @@ def _get_fq_paths(wildcards):
     except AttributeError:
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
     
-    print(df) # for testing
+    print(samples_filtered) # for testing
 
     fqs = map(lambda x: os.path.join(DATA, x + "*R1*"), samples_filtered.fastqs)
     print(list(chain.from_iterable(fqs))) # for testing
