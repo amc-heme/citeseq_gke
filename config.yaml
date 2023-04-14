@@ -22,11 +22,11 @@ WHITELIST_V2:
 
 # TSV relating all sequenced libraries to sane capture names
 FASTQS:
-    "/pbmc_test/example_fastqs.tsv"
+    "example_fastqs.tsv"
     
 # TSV with per-capture metadata and sample ID
 CAPTURES:
-    "/pbmc_test/example_captures.tsv"
+    "example_captures.tsv"
 
 GEX:
     - R030_1
