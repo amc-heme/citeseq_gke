@@ -69,7 +69,7 @@ rule cutadapt_feature:
       memory = "select[mem>32 && hname!=compute08] rusage[mem=32]"
     log: "logs/{sample}_cutadapt_{lib}.out"
     threads: 24
-    conda: "env_files/cutadapt.yml"
+    conda: "../env_files/cutadapt.yml"
     shell:
       """
       cutadapt -j 24 -l 25 \
@@ -101,7 +101,7 @@ rule starsolo_feature:
     resources:
       total_impact = 1
     threads: 12
-    conda: "env_files/star.yml"
+    conda: "../env_files/star.yml"
     shell:
       """
       STAR --soloType CB_UMI_Simple \
@@ -140,7 +140,7 @@ rule starsolo_gex_counts:
     resources:
       total_impact = 1
     threads: 14
-    conda: "env_files/star.yaml"
+    conda: "../env_files/star.yml"
     shell:
       """
       STAR --soloType CB_UMI_Simple \
