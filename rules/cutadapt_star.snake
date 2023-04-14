@@ -104,7 +104,7 @@ rule starsolo_feature:
     conda: "env_files/star.yml"
     shell:
       """
-      {STAR} --soloType CB_UMI_Simple \
+      STAR --soloType CB_UMI_Simple \
       --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts \
       --soloUMIfiltering MultiGeneUMI \
       --soloUMIdedup 1MM_Directional \
@@ -143,7 +143,7 @@ rule starsolo_gex_counts:
     conda: "env_files/star.yaml"
     shell:
       """
-      {STAR} --soloType CB_UMI_Simple \
+      STAR --soloType CB_UMI_Simple \
       --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts \
       --soloUMIfiltering MultiGeneUMI \
       --soloUMIdedup 1MM_Directional \
