@@ -64,11 +64,9 @@ rule cutadapt_feature:
       R1 = temp(RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R1.fastq.gz"),
       R2 = temp(RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R2.fastq.gz")
     params:
-      job_name = "cutadapt",
-      fq_count = _get_fq_count,
-      memory = "select[mem>32 && hname!=compute08] rusage[mem=32]"
+      fq_count = _get_fq_count
     log: "logs/{sample}_cutadapt_{lib}.out"
-    threads: 24
+    threads: 3
     conda: "../env_files/cutadapt.yml"
     shell:
       """
@@ -94,13 +92,9 @@ rule starsolo_feature:
     params:
       chemistry = _get_chem_version,
       truseq = _get_truseq_version,
-      out_dir = RESULTS+"/{lib}/{sample}/{sample}_", 
-      job_name = "star_feature",
-      memory = "select[mem>16 && hname!=compute08] rusage[mem=16]"
+      out_dir = RESULTS+"/{lib}/{sample}/{sample}_"
     log: "logs/{sample}_star_{lib}.out"
-    resources:
-      total_impact = 1
-    threads: 12
+    threads: 3
     conda: "../env_files/star.yml"
     shell:
       """
@@ -133,13 +127,9 @@ rule starsolo_gex_counts:
       chemistry = _get_chem_version,
       out_dir = RESULTS+"/gex/{sample}/{sample}_",
       cells = _get_cells_targeted,
-      extra_args = _get_extra_args,
-      job_name = "star_gex_counts",
-      memory = "select[mem>32 && hname!=compute02 && hname!=compute08 && hname!=compute19 && hname!=compute20] rusage[mem=32]"
+      extra_args = _get_extra_args
     log: "logs/{sample}_star_gex_counts.out"
-    resources:
-      total_impact = 1
-    threads: 14
+    threads: 3
     conda: "../env_files/star.yml"
     shell:
       """
