@@ -1,7 +1,7 @@
 """ Snakemake rules for running STARsolo on 10X data """
 
 """ Extract per-sample fastq paths """
-def _get_fq_paths(wildcards):
+def _get_fq1_paths(wildcards):
     try:
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == wildcards.lib) & (SAMPLES_DF.capture == wildcards.sample)]
     except AttributeError:
@@ -10,13 +10,21 @@ def _get_fq_paths(wildcards):
     fq1s = map(lambda x: os.path.join(DATA, x), samples_filtered.fastq1)
     fq1s = list(fq1s)
     
+    return fq1s
+    
+def _get_fq2_paths(wildcards):
+    try:
+      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == wildcards.lib) & (SAMPLES_DF.capture == wildcards.sample)]
+    except AttributeError:
+      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
+
     fq2s = map(lambda x: os.path.join(DATA, x), samples_filtered.fastq2)
     fq2s = list(fq2s)
     
-    return fq1s,fq2s
+    return fq2s
 
 def _get_fq_count(wildcards):
-    return len(_get_fq_paths(wildcards)[0])
+    return len(_get_fq1_paths(wildcards))
 
 """ Extract per-sample 10X chemistry versions from gex libs """
 def _get_chem_version(wildcards):
@@ -58,7 +66,8 @@ ruleorder: starsolo_gex_counts > starsolo_feature
 """ This rule is now only necessary for adt/hto libraries """
 rule cutadapt_feature:
     input:
-      R1, R2 = _get_fq_paths
+      R1 = _get_fq1_paths,
+      R2 = _get_fq2_paths
     output:
       R1 = temp(RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R1.fastq.gz"),
       R2 = temp(RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R2.fastq.gz")
@@ -119,7 +128,8 @@ rule starsolo_feature:
 """ This rule processes chromium V2/V3 gex libraries with STARsolo """
 rule starsolo_gex_counts:
     input:
-      R1, R2 = _get_fq_paths
+      R1 = _get_fq1_paths,
+      R2 = _get_fq2_paths
     output:
       RESULTS+"/gex/{sample}/{sample}_Solo.out/Barcodes.stats"
     params:
