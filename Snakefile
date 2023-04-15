@@ -21,7 +21,6 @@ WHITELIST_V2 = GS_PREFIX+config["WHITELIST_V2"]
 WHITELIST_V3 = GS_PREFIX+config["WHITELIST_V3"]
 SAMPLES_DF = pd.read_csv(FASTQS, sep = "\t")
 CAPTURES_DF = pd.read_csv(CAPTURES, sep = "\t")
-FASTQS = SAMPLES_DF.fastqs
 
 rule all:
     input:
