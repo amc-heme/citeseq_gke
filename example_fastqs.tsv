@@ -1,4 +1,4 @@
-capture	lib_type	fastqs	notes	exclude
-pbmc	gex	pbmc_GEX_L001_R1_001.fastq.gz		FALSE
-pbmc	gex	pbmc_GEX_L002_R1_001.fastq.gz		FALSE
-pbmc	adt	pbmc_ADT_L003_R1_001.fastq.gz		FALSE
+capture	lib_type	fastq1  fastq2	notes	exclude
+pbmc	gex	pbmc_GEX_L001_R1_001.fastq.gz pbmc_GEX_L001_R2_001.fastq.gz		FALSE
+pbmc	gex	pbmc_GEX_L002_R1_001.fastq.gz pbmc_GEX_L002_R2_001.fastq.gz		FALSE
+pbmc	adt	pbmc_ADT_L003_R1_001.fastq.gz pbmc_ADT_L003_R2_001.fastq.gz		FALSE
