@@ -95,9 +95,9 @@ rule starsolo_feature:
     input:
       R1 = RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R1.fastq.gz",
       R2 = RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R2.fastq.gz",
-      WHITELIST_V3,
-      WHITELIST_V2,
-      FEATURE_INDEX
+      WHITELISTV3 = WHITELIST_V3,
+      WHITELISTV2 = WHITELIST_V2,
+      FEATUREINDEX = FEATURE_INDEX
     output:
       RESULTS+"/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats"
     params:
@@ -133,9 +133,9 @@ rule starsolo_gex_counts:
     input:
       R1 = _get_fq1_paths,
       R2 = _get_fq2_paths,
-      WHITELIST_V3,
-      WHITELIST_V2,
-      FEATURE_INDEX
+      WHITELISTV3 = WHITELIST_V3,
+      WHITELISTV2 = WHITELIST_V2,
+      FEATUREINDEX = FEATURE_INDEX
     output:
       RESULTS+"/gex/{sample}/{sample}_Solo.out/Barcodes.stats"
     params:
