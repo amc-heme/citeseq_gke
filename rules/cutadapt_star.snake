@@ -7,13 +7,16 @@ def _get_fq_paths(wildcards):
     except AttributeError:
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
 
-    fqs = map(lambda x: os.path.join(DATA, x), samples_filtered.fastqs)
-    fqs = list(fqs)
+    fq1s = map(lambda x: os.path.join(DATA, x), samples_filtered.fastq1)
+    fq1s = list(fq1s)
     
-    return fqs
+    fq2s = map(lambda x: os.path.join(DATA, x), samples_filtered.fastq2)
+    fq2s = list(fq2s)
+    
+    return fq1s,fq2s
 
 def _get_fq_count(wildcards):
-    return len(_get_fq_paths(wildcards))
+    return len(_get_fq_paths(wildcards)[0])
 
 """ Extract per-sample 10X chemistry versions from gex libs """
 def _get_chem_version(wildcards):
@@ -55,7 +58,8 @@ ruleorder: starsolo_gex_counts > starsolo_feature
 """ This rule is now only necessary for adt/hto libraries """
 rule cutadapt_feature:
     input:
-      _get_fq_paths
+      R1 = _get_fq_paths[0],
+      R2 = _get_fq_paths[1]
     output:
       R1 = temp(RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R1.fastq.gz"),
       R2 = temp(RESULTS+"/cutadapt/{lib}/{sample}_{lib}_trimmed.R2.fastq.gz")
@@ -68,13 +72,13 @@ rule cutadapt_feature:
       """
       cutadapt -j 24 -l 25 \
         -o {output.R2} \
-        <(zcat $(echo {input} | sed 's/R1/R2/g'))
+        <(zcat {input.R2})
       
       if [[ {params.fq_count} == 1 ]]
       then
-        ln -s {input} {output.R1}
+        ln -s {input.R1} {output.R1}
       else
-        gunzip -c {input} | gzip -c > {output.R1}
+        gunzip -c {input.R1} | gzip -c > {output.R1}
       fi
       """
 
@@ -116,7 +120,8 @@ rule starsolo_feature:
 """ This rule processes chromium V2/V3 gex libraries with STARsolo """
 rule starsolo_gex_counts:
     input:
-      R1 = _get_fq_paths
+      R1 = _get_fq_paths[0],
+      R2 = _get_fq_paths[1]
     output:
       RESULTS+"/gex/{sample}/{sample}_Solo.out/Barcodes.stats"
     params:
@@ -145,7 +150,7 @@ rule starsolo_gex_counts:
       --limitOutSJcollapsed 2000000 \
       --outFileNamePrefix {params.out_dir} \
       --outSAMtype None \
-      --readFilesIn $(echo {input.R1} | sed 's/ /,/g;s/R1/R2/g') $(echo {input.R1} | sed 's/ /,/g')
+      --readFilesIn $(echo {input.R2} | sed 's/ /,/g') $(echo {input.R1} | sed 's/ /,/g')
       
       find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
       | grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
