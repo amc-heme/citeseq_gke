@@ -1,3 +1,0 @@
-SyntaxError in file /Users/jdesai/Desktop/The Institute/snakub_test/rules/cutadapt_star.snake, line 103:
-positional argument follows keyword argument
-  File "/Users/jdesai/Desktop/The Institute/snakub_test/Snakefile", line 32, in <module>

@@ -1,4 +1,0 @@
-AttributeError in file /Users/jdesai/Desktop/The Institute/snakub_test/Snakefile, line 24:
-'DataFrame' object has no attribute 'fastqs'
-  File "/Users/jdesai/Desktop/The Institute/snakub_test/Snakefile", line 24, in <module>
-  File "/Users/jdesai/mambaforge/envs/snakemake/lib/python3.11/site-packages/pandas/core/generic.py", line 5989, in __getattr__

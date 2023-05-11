@@ -1,8 +1,0 @@
-name: cutadapt
-#channels:
-#  - bioconda
-dependencies:
-#  - bioconda::cutadapt
-  - pip
-  - pip:
-    - git+https://github.com/marcelm/cutadapt.git
