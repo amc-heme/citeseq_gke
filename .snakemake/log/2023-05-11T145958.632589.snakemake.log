@@ -1,0 +1,21 @@
+Building DAG of jobs...
+WorkflowError:
+MissingInputException: Missing input files for rule starsolo_gex_counts:
+    output: bkt-test-926/bkt-test-926/pbmc_test/results/gex/pbmc/pbmc_Solo.out/Barcodes.stats
+    wildcards: sample=pbmc
+    affected files:
+        bkt-test-926/bkt-test-926/pbmc_test/data/pbmc_GEX_L002_R2_001.fastq.gz
+        bkt-test-926/bkt-test-926/ref/737K-august-2016.txt
+        bkt-test-926/bkt-test-926/pbmc_test/data/pbmc_GEX_L002_R1_001.fastq.gz
+        bkt-test-926/bkt-test-926/pbmc_test/data/pbmc_GEX_L001_R2_001.fastq.gz
+        bkt-test-926/bkt-test-926/ref/Features_20221123_star
+        bkt-test-926/bkt-test-926/ref/3M-february-2018.txt
+        bkt-test-926/bkt-test-926/pbmc_test/data/pbmc_GEX_L001_R1_001.fastq.gz
+MissingInputException: Missing input files for rule cutadapt_feature:
+    output: bkt-test-926/bkt-test-926/pbmc_test/results/cutadapt/gex/pbmc_gex_trimmed.R1.fastq.gz, bkt-test-926/bkt-test-926/pbmc_test/results/cutadapt/gex/pbmc_gex_trimmed.R2.fastq.gz
+    wildcards: lib=gex, sample=pbmc
+    affected files:
+        bkt-test-926/bkt-test-926/pbmc_test/data/pbmc_GEX_L001_R1_001.fastq.gz
+        bkt-test-926/bkt-test-926/pbmc_test/data/pbmc_GEX_L001_R2_001.fastq.gz
+        bkt-test-926/bkt-test-926/pbmc_test/data/pbmc_GEX_L002_R2_001.fastq.gz
+        bkt-test-926/bkt-test-926/pbmc_test/data/pbmc_GEX_L002_R1_001.fastq.gz

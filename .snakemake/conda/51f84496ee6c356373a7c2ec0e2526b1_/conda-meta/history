@@ -1,0 +1,20 @@
+==> 2023-05-01 17:38:43 <==
+# cmd: /Users/jdesai/mambaforge/condabin/mamba create --quiet --file /Users/jdesai/Desktop/institute/snakub_test/.snakemake/conda/51f84496ee6c356373a7c2ec0e2526b1_.yaml --prefix /Users/jdesai/Desktop/institute/snakub_test/.snakemake/conda/51f84496ee6c356373a7c2ec0e2526b1_
+# conda version: 23.3.1
++conda-forge/noarch::pip-23.1.2-pyhd8ed1ab_0
++conda-forge/noarch::setuptools-67.7.2-pyhd8ed1ab_0
++conda-forge/noarch::tzdata-2023c-h71feb2d_0
++conda-forge/noarch::wheel-0.40.0-pyhd8ed1ab_0
++conda-forge/osx-arm64::bzip2-1.0.8-h3422bc3_4
++conda-forge/osx-arm64::ca-certificates-2022.12.7-h4653dfc_0
++conda-forge/osx-arm64::libexpat-2.5.0-hb7217d7_1
++conda-forge/osx-arm64::libffi-3.4.2-h3422bc3_5
++conda-forge/osx-arm64::libsqlite-3.40.0-h76d750c_1
++conda-forge/osx-arm64::libzlib-1.2.13-h03a7124_4
++conda-forge/osx-arm64::ncurses-6.3-h07bb92c_1
++conda-forge/osx-arm64::openssl-3.1.0-h53f4e23_2
++conda-forge/osx-arm64::python-3.11.3-h1456518_0_cpython
++conda-forge/osx-arm64::readline-8.2-h92ec313_1
++conda-forge/osx-arm64::tk-8.6.12-he1e0b03_0
++conda-forge/osx-arm64::xz-5.2.6-h57fd34a_0
+# update specs: ['pip']

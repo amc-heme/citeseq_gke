@@ -1,0 +1,4 @@
+TypeError in file /Users/jdesai/Desktop/The Institute/snakub_test/rules/cutadapt_star.snake, line 61:
+'function' object is not subscriptable
+  File "/Users/jdesai/Desktop/The Institute/snakub_test/Snakefile", line 32, in <module>
+  File "/Users/jdesai/Desktop/The Institute/snakub_test/rules/cutadapt_star.snake", line 61, in <module>

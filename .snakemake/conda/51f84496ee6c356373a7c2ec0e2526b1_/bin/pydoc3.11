@@ -1,0 +1,5 @@
+#!/Users/jdesai/Desktop/institute/snakub_test/.snakemake/conda/51f84496ee6c356373a7c2ec0e2526b1_/bin/python3.11
+
+import pydoc
+if __name__ == '__main__':
+    pydoc.cli()

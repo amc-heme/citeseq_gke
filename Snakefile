@@ -3,7 +3,7 @@ import pandas as pd
 from os.path import join
 from snakemake.remote.GS import RemoteProvider as GSRemoteProvider
 GS = GSRemoteProvider()
-GS_PREFIX = "" #"bkt-test-926"
+GS_PREFIX = ""# "bkt-test-926"
 
 """ Snakefile for running 10x alevin pipeline """
 
