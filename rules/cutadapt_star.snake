@@ -30,9 +30,9 @@ def _get_fq_count(wildcards):
 def _get_chem_version(wildcards):
     chem_version = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample].chemistry.unique()
     if chem_version == "chromiumV3":
-        return [WHITELIST_V3,"--soloUMIlen 12"]
+        return [GS_PREFIX+WHITELIST_V3,"--soloUMIlen 12"]
     elif chem_version == "chromiumV2":
-        return WHITELIST_V2
+        return GS_PREFIX+WHITELIST_V2
 
 """ Extract per-sample TotalSeq versions for adt/hto libs """
 def _get_truseq_version(wildcards):
@@ -99,11 +99,20 @@ rule starsolo_feature:
       WHITELISTV2 = WHITELIST_V2,
       FEATUREINDEX = FEATURE_INDEX
     output:
-      RESULTS+"/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats"
+      RESULTS + "/{lib}/{sample}/{sample}_Log.progress.out",
+      RESULTS + "/{lib}/{sample}/{sample}_SJ.out.tab",
+      RESULTS + "/{lib}/{sample}/{sample}_Log.final.out",
+      RESULTS + "/{lib}/{sample}/{sample}_Log.out",
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats",
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/Features.stats",
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/Summary.csv",
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv",
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/features.tsv",
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx"
     params:
       chemistry = _get_chem_version,
       truseq = _get_truseq_version,
-      out_dir = RESULTS+"/{lib}/{sample}/{sample}_"
+      out_dir = GS_PREFIX + RESULTS+"/{lib}/{sample}/{sample}_"
     log: "logs/{sample}_star_{lib}.out"
     threads: 3
     conda: "../env_files/star.yml"
@@ -119,13 +128,13 @@ rule starsolo_feature:
       --soloBarcodeReadLength 0 \
       --soloCBwhitelist {params.chemistry} \
       {params.truseq} 10 \
-      --genomeDir {FEATURE_INDEX} \
+      --genomeDir {input.FEATUREINDEX} \
       --soloCellFilter None \
       --outFileNamePrefix {params.out_dir} \
       --readFilesIn {input.R2} {input.R1}
       
-      find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
-      | grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
+      #find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
+      #| grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
       """
 
 """ This rule processes chromium V2/V3 gex libraries with STARsolo """
@@ -135,12 +144,21 @@ rule starsolo_gex_counts:
       R2 = _get_fq2_paths,
       WHITELISTV3 = WHITELIST_V3,
       WHITELISTV2 = WHITELIST_V2,
-      FEATUREINDEX = FEATURE_INDEX
+      GEXINDEX = GEX_INDEX
     output:
-      RESULTS+"/gex/{sample}/{sample}_Solo.out/Barcodes.stats"
+      RESULTS + "/gex/{sample}/{sample}_Log.progress.out",
+      RESULTS + "/gex/{sample}/{sample}_SJ.out.tab",
+      RESULTS + "/gex/{sample}/{sample}_Log.final.out",
+      RESULTS + "/gex/{sample}/{sample}_Log.out",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Barcodes.stats",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/Features.stats",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/Summary.csv",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/features.tsv",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx"
     params:
       chemistry = _get_chem_version,
-      out_dir = RESULTS+"/gex/{sample}/{sample}_",
+      out_dir = GS_PREFIX + RESULTS+"/gex/{sample}/{sample}_",
       cells = _get_cells_targeted,
       extra_args = _get_extra_args
     log: "logs/{sample}_star_gex_counts.out"
@@ -157,7 +175,7 @@ rule starsolo_gex_counts:
       --soloBarcodeReadLength 0 \
       --outFilterScoreMin 30 \
       --soloCBwhitelist {params.chemistry} \
-      --genomeDir {GEX_INDEX} \
+      --genomeDir {input.GEXINDEX} \
       --clipAdapterType CellRanger4 \
       --soloFeatures Gene SJ Velocyto \
       --soloCellFilter EmptyDrops_CR {params.cells} {params.extra_args} \
@@ -166,7 +184,7 @@ rule starsolo_gex_counts:
       --outSAMtype None \
       --readFilesIn $(echo {input.R2} | sed 's/ /,/g') $(echo {input.R1} | sed 's/ /,/g')
       
-      find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
-      | grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
+      #find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
+      #| grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
       """
 
