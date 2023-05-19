@@ -20,8 +20,9 @@ gcloud container clusters create $CLUSTER_NAME \
     --enable-autoscaling \
     --network=$NETWORK \
     --subnetwork=$SUBNETWORK \
-    --service-account $SERVICE_ACCOUNT \
-    --workload-pool=$PROJECT.svc.id.goog
+    --service-account $SERVICE_ACCOUNT
+    --enable-identity-service
+ #   --workload-pool=$PROJECT.svc.id.goog
     
 
 # we need a delete script or a delete option here.

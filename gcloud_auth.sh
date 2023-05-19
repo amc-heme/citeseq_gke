@@ -16,5 +16,7 @@ BUCKET="bkt-test-926"
 gcloud container clusters get-credentials --zone=$ZONE --project $PROJECT $CLUSTER_NAME
 
 
+gcloud container clusters get-credentials --zone="us-central1-c" --project "prj-dev-bio-sandbox" "test-cluster-small"
+
 #Separate this into a third script
-#snakemake --kubernetes --use-conda --default-remote-provider GS --default-remote-prefix $BUCKET -j 999
+snakemake --kubernetes --use-conda --default-remote-provider GS --default-remote-prefix $BUCKET -j 999
