@@ -228,13 +228,10 @@ rule h5ad_from_10x_mtx:
     log: "logs/{sample}_h5ad"
     threads: 1
     conda: "../env_files/anndata.yml"
-    run:
-      import scanpy
-      print("Reading matrix")
-      adata = scanpy.read_10x_mtx(params.mtx_dir)
-      print("Writing h5ad")
-      adata.write_h5ad(str(output))
-      print("Done!")
+    shell:
+      """
+        python3 ../inst/convert_mtx.py {params.mtx_dir} {output}
+      """
 
 """ This rule provides X """
 rule dropkick_run:
@@ -274,3 +271,4 @@ rule dropkick_qc:
         dropkick qc -o {params.out_dir} {input}
         mv {params.out_file} {output}
       """
+	
