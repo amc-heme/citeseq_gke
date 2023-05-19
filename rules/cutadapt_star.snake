@@ -251,6 +251,7 @@ rule dropkick_run:
     conda: "../env_files/dropkick-git.yml"
     shell:
       """
+        #dropkick run -j 5 {params.manual} --csv -o {params.out_dir} {input}
         dropkick run -j 5 {params.manual} --csv -o {params.out_dir} {input}
       """
 
