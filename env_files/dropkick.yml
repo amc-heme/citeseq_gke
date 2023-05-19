@@ -1,0 +1,7 @@
+name: dropkick
+dependencies:
+  - python=3.10.9
+  - pip
+  - numpy
+  - pip:
+    - dropkick==1.2.6

@@ -1,0 +1,7 @@
+name: dropkick-git
+dependencies:
+  - python=3.10.9
+  - pip
+  - numpy
+  - pip:
+    - git+https://github.com/amc-heme/dropkick.git
