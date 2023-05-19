@@ -61,6 +61,13 @@ def _get_extra_args(wildcards):
     captures_filtered = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample]
     return list(captures_filtered.extra_args.unique())
 
+def _get_dropkick_params(wildcards):
+    dropkick = CAPTURES_DF[CAPTURES_DF.capture_name == wildcards.sample].dropkick.unique()
+    if pd.isna(dropkick):
+        return ('')
+    else:
+        return "--multimanual --manualthresh "+''.join(map(str, dropkick))
+
 ruleorder: starsolo_gex_counts > starsolo_feature 
 
 """ This rule is now only necessary for adt/hto libraries """
@@ -208,3 +215,62 @@ rule starsolo_gex_counts:
       #| grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
       """
 
+rule h5ad_from_10x_mtx:
+    input:
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/features.tsv"
+    output:
+      temp(RESULTS+"/dropkick/{sample}.h5ad")
+    params:
+      job_name = "h5ad_from_10x_mtx",
+      mtx_dir = RESULTS+"/gex/{sample}/{sample}_Solo.out/Gene/raw/"
+    log: "logs/{sample}_h5ad"
+    threads: 1
+    conda: "../env_files/anndata.yml"
+    run:
+      import scanpy
+      print("Reading matrix")
+      adata = scanpy.read_10x_mtx(params.mtx_dir)
+      print("Writing h5ad")
+      adata.write_h5ad(str(output))
+      print("Done!")
+
+""" This rule provides X """
+rule dropkick_run:
+    input:
+      RESULTS+"/dropkick/{sample}.h5ad"
+    output:
+      RESULTS+"/dropkick/{sample}_coef.png",
+      RESULTS+"/dropkick/{sample}_score.png",
+      RESULTS+"/dropkick/{sample}_dropkick_scores.csv",
+      temp(RESULTS+"/dropkick/{sample}_dropkick.h5ad")
+    params:
+      job_name = "dropkick_run",
+      out_dir = RESULTS+"/dropkick/",
+      manual = _get_dropkick_params
+    log: "logs/{sample}_dropkick_run"
+    threads: 5
+    conda: "../env_files/dropkick-git.yml"
+    shell:
+      """
+        dropkick run -j 5 {params.manual} --csv -o {params.out_dir} {input}
+      """
+
+rule dropkick_qc:
+    input:
+      RESULTS+"/dropkick/{sample}.h5ad"
+    output:
+      RESULTS+"/dropkick/{sample}-qc.png"
+    params:
+      job_name = "dropkick_qc",
+      out_dir = RESULTS+"/dropkick/",
+      out_file = RESULTS+"/dropkick/{sample}_qc.png"
+    log: "logs/{sample}_dropkick_qc"
+    threads: 1
+    conda: "../env_files/dropkick-git.yml"
+    shell:
+      """
+        dropkick qc -o {params.out_dir} {input}
+        mv {params.out_file} {output}
+      """
