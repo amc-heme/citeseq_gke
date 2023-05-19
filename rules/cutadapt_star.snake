@@ -61,12 +61,12 @@ def _get_extra_args(wildcards):
     captures_filtered = CAPTURES_DF[CAPTURES_DF.capture == wildcards.sample]
     return list(captures_filtered.extra_args.unique())
 
-def _get_dropkick_params(wildcards):
-    dropkick = CAPTURES_DF[CAPTURES_DF.capture_name == wildcards.sample].dropkick.unique()
-    if pd.isna(dropkick):
-        return ('')
-    else:
-        return "--multimanual --manualthresh "+''.join(map(str, dropkick))
+#def _get_dropkick_params(wildcards):
+#    dropkick = CAPTURES_DF[CAPTURES_DF.capture_name == wildcards.sample].dropkick.unique()
+#    if pd.isna(dropkick):
+#        return ('')
+#    else:
+#        return "--multimanual --manualthresh "+''.join(map(str, dropkick))
 
 ruleorder: starsolo_gex_counts > starsolo_feature 
 
@@ -244,8 +244,8 @@ rule dropkick_run:
       temp(RESULTS+"/dropkick/{sample}_dropkick.h5ad")
     params:
       job_name = "dropkick_run",
-      out_dir = RESULTS+"/dropkick/",
-      manual = _get_dropkick_params
+      out_dir = RESULTS+"/dropkick/"
+      #manual = _get_dropkick_params
     log: "logs/{sample}_dropkick_run"
     threads: 5
     conda: "../env_files/dropkick-git.yml"
