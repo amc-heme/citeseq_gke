@@ -256,7 +256,7 @@ rule dropkick_run:
 
 rule dropkick_qc:
     input:
-      RESULTS+"/dropkick/{sample}.h5ad"
+      RESULTS+"/dropkick/{sample}_annndata.h5ad"
     output:
       RESULTS+"/dropkick/{sample}-qc.png"
     params:
