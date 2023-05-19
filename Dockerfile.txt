@@ -21,3 +21,17 @@ RUN gcloud components install kubectl --quiet
 #snakemake --kubernetes --use-conda --default-remote-provider GS --default-remote-prefix "bkt-test-926" -j 999 
 #export  GOOGLE_APPLICATION_CREDENTIALS=/root/citeseq-SA-prj-dev-bio-sandbox-8b44405654ec.json 
 
+
+
+
+## THIS IS OLD STUFF FOR REFERENCE
+#FROM --platform=linux/amd64 snakemake/snakemake as citeseq_pipeline_stage1
+
+#RUN apt update && apt dist-upgrade
+
+#RUN curl -sSL https://sdk.cloud.google.com | bash
+
+#ADD env_files/stage1.yml .
+
+#RUN mamba env update --file stage1.yml &&\
+#    conda clean -tipy 
