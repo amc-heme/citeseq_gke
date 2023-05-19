@@ -27,6 +27,10 @@ rule all:
       # generate gex counts (no BAM)
       expand("{results}/gex/{sample}/{sample}_Solo.out/Barcodes.stats", results = RESULTS, sample = GEX),
       # generate adt counts
-      expand("{results}/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats", results = RESULTS, sample = ADT, lib = "adt")
+      expand("{results}/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats", results = RESULTS, sample = ADT, lib = "adt"),
+      # generate dropkick h5ad
+      expand("{results}/dropkick/{sample}_dropkick.h5ad", results = RESULTS, sample = GEX),
+      # generate dropkick qc
+      expand("{results}/dropkick/{sample}-qc.png", results = RESULTS, sample = GEX)
 
 include: "rules/cutadapt_star.snake"
