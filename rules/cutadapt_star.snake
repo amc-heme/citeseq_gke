@@ -224,7 +224,7 @@ rule h5ad_from_10x_mtx:
       temp(RESULTS+"/dropkick/{sample}_anndata.h5ad")
     params:
       job_name = "h5ad_from_10x_mtx",
-      mtx_dir = RESULTS+"/gex/{sample}/{sample}_Solo.out/Gene/raw/"
+      mtx_dir = GS_PREFIX + RESULTS+"/gex/{sample}/{sample}_Solo.out/Gene/raw/"
     log: "logs/{sample}_h5ad"
     threads: 1
     conda: "../env_files/anndata.yml"
@@ -244,7 +244,7 @@ rule dropkick_run:
       temp(RESULTS+"/dropkick/{sample}_dropkick.h5ad")
     params:
       job_name = "dropkick_run",
-      out_dir = RESULTS+"/dropkick/"
+      out_dir = GS_PREFIX + RESULTS+"/dropkick/"
       #manual = _get_dropkick_params
     log: "logs/{sample}_dropkick_run"
     threads: 5
@@ -261,8 +261,8 @@ rule dropkick_qc:
       RESULTS+"/dropkick/{sample}-qc.png"
     params:
       job_name = "dropkick_qc",
-      out_dir = RESULTS+"/dropkick/",
-      out_file = RESULTS+"/dropkick/{sample}_qc.png"
+      out_dir = GS_PREFIX + RESULTS+"/dropkick/",
+      out_file = GS_PREFIX + RESULTS+"/dropkick/{sample}_qc.png"
     log: "logs/{sample}_dropkick_qc"
     threads: 1
     conda: "../env_files/dropkick-git.yml"
