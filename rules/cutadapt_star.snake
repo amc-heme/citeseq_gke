@@ -230,7 +230,7 @@ rule h5ad_from_10x_mtx:
     conda: "../env_files/anndata.yml"
     shell:
       """
-        python3 ../inst/convert_mtx.py {params.mtx_dir} {output}
+        python3 inst/convert_mtx.py {params.mtx_dir} {output}
       """
 
 """ This rule provides X """
