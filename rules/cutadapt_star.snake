@@ -221,7 +221,7 @@ rule h5ad_from_10x_mtx:
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/features.tsv"
     output:
-      temp(RESULTS+"/dropkick/{sample}.h5ad")
+      temp(RESULTS+"/dropkick/{sample}_anndata.h5ad")
     params:
       job_name = "h5ad_from_10x_mtx",
       mtx_dir = RESULTS+"/gex/{sample}/{sample}_Solo.out/Gene/raw/"
@@ -236,7 +236,7 @@ rule h5ad_from_10x_mtx:
 """ This rule provides X """
 rule dropkick_run:
     input:
-      RESULTS+"/dropkick/{sample}.h5ad"
+      RESULTS+"/dropkick/{sample}_anndata.h5ad"
     output:
       RESULTS+"/dropkick/{sample}_coef.png",
       RESULTS+"/dropkick/{sample}_score.png",
