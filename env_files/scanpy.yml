@@ -1,0 +1,5 @@
+name: scanpy
+channels:
+  - conda-forge
+dependencies:
+  - conda-forge::scanpy

@@ -227,7 +227,7 @@ rule h5ad_from_10x_mtx:
       mtx_dir = GS_PREFIX + RESULTS+"/gex/{sample}/{sample}_Solo.out/Gene/raw/"
     log: "logs/{sample}_h5ad"
     threads: 1
-    conda: "../env_files/anndata.yml"
+    conda: "../env_files/scanpy.yml"
     shell:
       """
         python3 inst/convert_mtx.py {params.mtx_dir} {output}
