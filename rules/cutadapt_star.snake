@@ -107,15 +107,15 @@ rule starsolo_feature:
       FEATUREINDEX = FEATURE_INDEX
     output:
       RESULTS + "/{lib}/{sample}/{sample}_Log.progress.out",
-      RESULTS + "/{lib}/{sample}/{sample}_SJ.out.tab",
+      RESULTS + "/{lib}/{sample}/{sample}_SJ.out.tab.gz",
       RESULTS + "/{lib}/{sample}/{sample}_Log.final.out",
       RESULTS + "/{lib}/{sample}/{sample}_Log.out",
       RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Barcodes.stats",
       RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/Features.stats",
       RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/Summary.csv",
-      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv",
-      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/features.tsv",
-      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx"
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv.gz",
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/features.tsv.gz",
+      RESULTS + "/{lib}/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx.gz"
     params:
       chemistry = _get_chem_version,
       truseq = _get_truseq_version,
@@ -140,8 +140,8 @@ rule starsolo_feature:
       --outFileNamePrefix {params.out_dir} \
       --readFilesIn {input.R2} {input.R1}
       
-      #find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
-      #| grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
+      find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
+      | grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
       """
 
 """ This rule processes chromium V2/V3 gex libraries with STARsolo """
@@ -156,31 +156,31 @@ rule starsolo_gex_counts:
       RESULTS + "/gex/{sample}/{sample}_Log.final.out",
       RESULTS + "/gex/{sample}/{sample}_Log.out",
       RESULTS + "/gex/{sample}/{sample}_Log.progress.out",
-      RESULTS + "/gex/{sample}/{sample}_SJ.out.tab",
+      RESULTS + "/gex/{sample}/{sample}_SJ.out.tab.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Barcodes.stats",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/Features.stats",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/barcodes.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/spliced.mtx",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/unspliced.mtx",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/features.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/ambiguous.mtx",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/barcodes.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/spliced.mtx",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/unspliced.mtx",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/features.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/ambiguous.mtx",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/barcodes.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/spliced.mtx.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/unspliced.mtx.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/features.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/filtered/ambiguous.mtx.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/barcodes.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/spliced.mtx.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/unspliced.mtx.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/features.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/ambiguous.mtx.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/Summary.csv",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/features.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/barcodes.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/matrix.mtx",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/barcodes.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/matrix.mtx.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/Summary.csv",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/Features.stats",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/filtered/barcodes.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/filtered/matrix.mtx",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/filtered/features.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/features.tsv",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/filtered/barcodes.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/filtered/matrix.mtx.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/filtered/features.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/features.tsv.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/Summary.csv",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/UMIperCellSorted.txt"
     params:
@@ -211,15 +211,15 @@ rule starsolo_gex_counts:
       --outSAMtype None \
       --readFilesIn $(echo {input.R2} | sed 's/ /,/g') $(echo {input.R1} | sed 's/ /,/g')
       
-      #find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
-      #| grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
+      find {params.out_dir}* -name "*tsv" -o -name '*mtx' -o -name '*tab' \
+      | grep -v 'SJ/raw/features.tsv' | while read i; do gzip $i; done
       """
 
 rule h5ad_from_10x_mtx:
     input:
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/features.tsv"
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/barcodes.tsv.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/matrix.mtx.gz",
+      RESULTS + "/gex/{sample}/{sample}_Solo.out/Gene/raw/features.tsv.gz"
     output:
       temp(RESULTS+"/dropkick/{sample}_anndata.h5ad")
     params:
