@@ -248,7 +248,7 @@ rule dropkick_run:
       #manual = _get_dropkick_params
     log: "logs/{sample}_dropkick_run"
     threads: 5
-    conda: "../env_files/dropkick.yml"
+    conda: "../env_files/dropkick-git.yml"
     shell:
       """
         dropkick run -j 5 --csv -o {params.out_dir} {input}
@@ -265,7 +265,7 @@ rule dropkick_qc:
       out_file = GS_PREFIX + RESULTS+"/dropkick/{sample}_anndata_qc.png"
     log: "logs/{sample}_dropkick_qc"
     threads: 1
-    conda: "../env_files/dropkick.yml"
+    conda: "../env_files/dropkick-git.yml"
     shell:
       """
         dropkick qc -o {params.out_dir} {input}
