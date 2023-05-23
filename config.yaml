@@ -20,6 +20,9 @@ WHITELIST_V3:
 WHITELIST_V2:
     "/ref/737K-august-2016.txt"
 
+FASTP_ADAPTERS:
+    "/ref/fastp_adapters.fa"
+
 # TSV relating all sequenced libraries to sane capture names
 FASTQS:
     "example_fastqs.tsv"
