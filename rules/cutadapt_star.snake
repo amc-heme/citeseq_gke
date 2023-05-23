@@ -70,6 +70,30 @@ def _get_extra_args(wildcards):
 
 ruleorder: starsolo_gex_counts > starsolo_feature 
 
+""" This rule processes all libraries with fastp """
+rule fastp:
+    output:
+        H1 = RESULTS+"/fastp/{fastq}.html",
+        J1 = RESULTS+"/fastp/{fastq}.fastp.json"
+    params:
+      job_name = "fastp"
+    log: "logs/{fastq}_fastp.out"
+    threads: 8
+    conda: "../env_files/fastp.yml"
+    shell:
+      """
+      echo R1 {DATA}/{wildcards.fastq}*R1*gz
+      echo R2 {DATA}/{wildcards.fastq}*R2*gz
+      {FASTP} \
+        -i <(zcat {DATA}/{wildcards.fastq}*R1*gz) \
+        -I <(zcat {DATA}/{wildcards.fastq}*R2*gz) \
+        -h {output.H1} \
+        -j {output.J1} \
+        -w 8 -p -b 31 -B 151 \
+        --adapter_fasta {FASTP_ADAPTERS} \
+        --overlap_len_require 32
+      """
+
 """ This rule is now only necessary for adt/hto libraries """
 rule cutadapt_feature:
     input:
