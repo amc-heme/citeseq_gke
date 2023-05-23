@@ -1,5 +1,7 @@
 name: dropkick
 dependencies:
+  - gcc
+  - gfortran
   - python=3.10.9
   - pip
   - numpy

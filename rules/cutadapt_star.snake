@@ -170,7 +170,7 @@ rule starsolo_gex_counts:
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/features.tsv.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/raw/ambiguous.mtx.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/Velocyto/Summary.csv",
-      RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/features.tsv",
+      #RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/features.tsv.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/barcodes.tsv.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/raw/matrix.mtx.gz",
       RESULTS + "/gex/{sample}/{sample}_Solo.out/SJ/Summary.csv",
@@ -248,7 +248,7 @@ rule dropkick_run:
       #manual = _get_dropkick_params
     log: "logs/{sample}_dropkick_run"
     threads: 5
-    conda: "../env_files/dropkick-git.yml"
+    conda: "../env_files/dropkick.yml"
     shell:
       """
         dropkick run -j 5 --csv -o {params.out_dir} {input}
@@ -265,7 +265,7 @@ rule dropkick_qc:
       out_file = GS_PREFIX + RESULTS+"/dropkick/{sample}_qc.png"
     log: "logs/{sample}_dropkick_qc"
     threads: 1
-    conda: "../env_files/dropkick-git.yml"
+    conda: "../env_files/dropkick.yml"
     shell:
       """
         dropkick qc -o {params.out_dir} {input}
