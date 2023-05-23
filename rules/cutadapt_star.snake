@@ -262,7 +262,7 @@ rule dropkick_qc:
     params:
       job_name = "dropkick_qc",
       out_dir = GS_PREFIX + RESULTS+"/dropkick/",
-      out_file = GS_PREFIX + RESULTS+"/dropkick/{sample}_qc.png"
+      out_file = GS_PREFIX + RESULTS+"/dropkick/{sample}_anndata_qc.png"
     log: "logs/{sample}_dropkick_qc"
     threads: 1
     conda: "../env_files/dropkick.yml"
