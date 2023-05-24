@@ -22,7 +22,5 @@ gcloud container clusters create $CLUSTER_NAME \
     --subnetwork=$SUBNETWORK \
     --service-account $SERVICE_ACCOUNT
     
-
-# we need a delete script or a delete option here.
-# will need to be tested 
-# gcloud container clusters delete $CLUSTER_NAME
+#gives the cluster the appropriate credentials
+gcloud container clusters get-credentials --zone=$ZONE --project $PROJECT $CLUSTER_NAME
