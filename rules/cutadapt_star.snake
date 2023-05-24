@@ -247,11 +247,11 @@ rule dropkick_run:
       out_dir = GS_PREFIX + RESULTS+"/dropkick/"
       #manual = _get_dropkick_params
     log: "logs/{sample}_dropkick_run"
-    threads: 5
+    threads: 3
     conda: "../env_files/dropkick-git.yml"
     shell:
       """
-        dropkick run -j 5 --csv -o {params.out_dir} {input}
+        dropkick run -j 3 --csv -o {params.out_dir} {input}
       """
 
 rule dropkick_qc:

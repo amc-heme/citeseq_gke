@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CLUSTER_NAME="test-cluster-small"
+CLUSTER_NAME="citeseq-cluster"
 ZONE="us-central1-c"
 MACHINE_TYPE="e2-highmem-4"
 NETWORK="projects/prj-dev-bio-sandbox/global/networks/dev"
@@ -21,8 +21,6 @@ gcloud container clusters create $CLUSTER_NAME \
     --network=$NETWORK \
     --subnetwork=$SUBNETWORK \
     --service-account $SERVICE_ACCOUNT
-    --enable-identity-service
- #   --workload-pool=$PROJECT.svc.id.goog
     
 
 # we need a delete script or a delete option here.

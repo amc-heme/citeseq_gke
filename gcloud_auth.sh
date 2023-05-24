@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CLUSTER_NAME="test-cluster-small"
+CLUSTER_NAME="citeseq-cluster"
 ZONE="us-central1-c"
 MACHINE_TYPE="e2-highmem-4"
 NETWORK="dev"
@@ -13,10 +13,8 @@ BUCKET="bkt-test-926"
 #gcloud auth application-default login
 
 #gives the cluster the appropriate credentials
-gcloud container clusters get-credentials --zone=$ZONE --project $PROJECT $CLUSTER_NAME
-
-
-gcloud container clusters get-credentials --zone="us-central1-c" --project "prj-dev-bio-sandbox" "test-cluster-small"
+#gcloud container clusters get-credentials --zone=$ZONE --project $PROJECT $CLUSTER_NAME
+gcloud container clusters get-credentials --zone="us-central1-c" --project "prj-dev-bio-sandbox" "citeseq-cluster"
 
 #Separate this into a third script
 snakemake --kubernetes --use-conda --default-remote-provider GS --default-remote-prefix $BUCKET -j 999
