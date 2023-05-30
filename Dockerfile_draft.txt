@@ -1,24 +1,33 @@
-FROM --platform=linux/amd64 snakemake/snakemake as citeseq_pipeline_stage1
+FROM --platform=linux/amd64 snakemake/snakemake 
 
 RUN apt-get update 
+
+WORKDIR /root/
 
 RUN curl -sSL https://sdk.cloud.google.com > /tmp/gcl && bash /tmp/gcl --disable-prompts
 
 #export PATH=$PATH:/root/google-cloud-sdk/bin/
-ENV PATH $PATH:~/gcloud/google-cloud-sdk/bin
+ENV PATH $PATH:/root/google-cloud-sdk/bin 
 
 RUN gcloud components install kubectl --quiet
 
-#git clone https://github.com/amc-heme/citeseq_gke.git
+RUN pip install kubernetes 
 
-#pip install kubernetes 
+RUN git clone https://github.com/amc-heme/citeseq_gke.git
 
-# Docker cp file to image 
-# docker cp ~/Downloads/citeseq-SA-prj-dev-bio-sandbox-8b44405654ec.json ecstatic_feynman:/root
+#This will be replaced with the secrets file reference
+COPY citeseq-SA-key.json /root/citeseq-SA-key.json 
 
-#gcloud auth activate-service-account --key-file=citeseq-SA-prj-dev-bio-sandbox-8b44405654ec.json 
-#gcloud container clusters get-credentials --zone="us-central1-c" --project "prj-dev-bio-sandbox" "test-cluster-small"
-#snakemake --kubernetes --use-conda --default-remote-provider GS --default-remote-prefix "bkt-test-926" -j 999 
-#export  GOOGLE_APPLICATION_CREDENTIALS=/root/citeseq-SA-prj-dev-bio-sandbox-8b44405654ec.json 
+ENV GOOGLE_APPLICATION_CREDENTIALS /root/citeseq-SA-key.json 
 
-# ENTRYPOINT > SNAKEMAKE
+RUN gcloud auth activate-service-account --key-file=/root/citeseq-SA-key.json 
+
+WORKDIR /root/citeseq_gke/
+
+RUN create_kubernetes_cluster.sh
+RUN snakecharmer.sh
+RUN delete_kubernetes_cluster.sh
+
+### Notes
+# Reference https://insights.project-a.com/using-github-actions-to-deploy-to-kubernetes-in-gke/ 
+###
