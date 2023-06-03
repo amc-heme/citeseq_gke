@@ -9,25 +9,25 @@ PROJECT="prj-dev-bio-sandbox"
 BUCKET="bkt-test-926"
 SERVICE_ACCOUNT="citeseq-pipeline-sa@prj-dev-bio-sandbox.iam.gserviceaccount.com"
 
-gcloud container clusters create $CLUSTER_NAME \
-    --zone=$ZONE \
-    --num-nodes=1 \
-    --machine-type=$MACHINE_TYPE \
-    --scopes storage-rw \
-    --disk-size=200GB \
-    --max-nodes=2 \
-    --min-nodes=0 \
-    --enable-autoscaling \
-    --network=$NETWORK \
-    --subnetwork=$SUBNETWORK \
-    --service-account $SERVICE_ACCOUNT \
-    --project $PROJECT
+#gcloud container clusters create $CLUSTER_NAME \
+#    --zone=$ZONE \
+#    --num-nodes=1 \
+#    --machine-type=$MACHINE_TYPE \
+#    --scopes storage-rw \
+#    --disk-size=200GB \
+#    --max-nodes=2 \
+#    --min-nodes=0 \
+#    --enable-autoscaling \
+#    --network=$NETWORK \
+#    --subnetwork=$SUBNETWORK \
+#    --service-account $SERVICE_ACCOUNT \
+#    --project $PROJECT
     
 #gives the cluster the appropriate credentials
-gcloud container clusters get-credentials --zone=$ZONE --project $PROJECT $CLUSTER_NAME
+#gcloud container clusters get-credentials --zone=$ZONE --project $PROJECT $CLUSTER_NAME
 
 #Run the pipeline
 snakemake --kubernetes --use-conda --default-remote-provider GS --default-remote-prefix $BUCKET -j 999
 
 #bye bye cluster!
-gcloud container clusters delete --zone=$ZONE --project $PROJECT --quiet $CLUSTER_NAME 
+#gcloud container clusters delete --zone=$ZONE --project $PROJECT --quiet $CLUSTER_NAME

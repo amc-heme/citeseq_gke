@@ -1,0 +1,38 @@
+name: CITE-Seq Snakemake GKE Pipeline Action
+#run-name: Deploy to ${{ github.action_path }} by @${{ github.actor }}
+on:
+  #push:
+  #  branches:
+  #  - main
+  #pull_request:
+  #  types: [assigned, opened, synchronize, reopened]
+  workflow_dispatch
+
+permissions:
+  id-token: 'write'       # This is required for requesting the JWT
+  contents: 'read'        # This is required for actions/checkout
+  #issues: 'write'         # Need this to create issues if we detect state drift
+  #pull-requests: 'write'  # Need this to comment back on PRs
+
+jobs:
+  snakemake:
+    name: Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - id: 'auth'
+        name: 'Setup GCP Service Account'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+          workload_identity_provider: 'projects/${{secrets.GCP_SA_PROJECT_NUMBER}}/locations/global/workloadIdentityPools/sm-pool/providers/github-provider'
+      - id: 'snake'
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: '.test'
+          snakefile: '${{ github.workspace }}/Snakefile'
+          args: '--kubernetes --use-conda --default-remote-provider GS --default-remote-prefix ${{ secrets.GCP_BUCKET }} -j 999'
+          stagein: '' # additional preliminary commands to run (can be multiline)
+          

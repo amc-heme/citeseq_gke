@@ -20,7 +20,8 @@ gcloud container clusters create $CLUSTER_NAME \
     --enable-autoscaling \
     --network=$NETWORK \
     --subnetwork=$SUBNETWORK \
-    --service-account $SERVICE_ACCOUNT
+    --service-account $SERVICE_ACCOUNT \
+    --project $PROJECT
     
 #gives the cluster the appropriate credentials
 gcloud container clusters get-credentials --zone=$ZONE --project $PROJECT $CLUSTER_NAME
