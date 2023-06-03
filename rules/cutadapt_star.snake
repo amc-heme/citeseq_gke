@@ -6,6 +6,8 @@ def _get_fq1_paths(wildcards):
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == wildcards.lib) & (SAMPLES_DF.capture == wildcards.sample)]
     except AttributeError:
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
+    except AttributeError:
+      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.basename == wildcards.fastq)]
 
     fq1s = map(lambda x: os.path.join(DATA, x), samples_filtered.fastq1)
     fq1s = list(fq1s)
@@ -17,6 +19,8 @@ def _get_fq2_paths(wildcards):
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == wildcards.lib) & (SAMPLES_DF.capture == wildcards.sample)]
     except AttributeError:
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
+    except AttributeError:
+      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.basename == wildcards.fastq)]
 
     fq2s = map(lambda x: os.path.join(DATA, x), samples_filtered.fastq2)
     fq2s = list(fq2s)
@@ -75,24 +79,25 @@ wildcard_constraints:
 
 """ This rule processes all libraries with fastp """
 rule fastp:
+    input:
+      R1 = _get_fq1_paths,
+      R2 = _get_fq2_paths
     output:
         H1 = RESULTS+"/fastp/{fastq}.html",
-        J1 = RESULTS+"/fastp/{fastq}.fastp.json"
+        J1 = RESULTS+"/fastp/{fastq}.json"
     params:
       job_name = "fastp"
     log: "logs/{fastq}_fastp.out"
-    threads: 8
+    threads: 4
     conda: "../env_files/fastp.yml"
     shell:
       """
-      echo R1 {DATA}/{wildcards.fastq}*R1*gz
-      echo R2 {DATA}/{wildcards.fastq}*R2*gz
       fastp \
-        -i <(zcat {DATA}/{wildcards.fastq}*R1*gz) \
-        -I <(zcat {DATA}/{wildcards.fastq}*R2*gz) \
+        -i {input.R1} \
+        -I {input.R2} \
         -h {output.H1} \
         -j {output.J1} \
-        -w 8 -p -b 31 -B 151 \
+        -w 4 -p -b 31 -B 151 \
         --adapter_fasta {FASTP_ADAPTERS} \
         --overlap_len_require 32
       """
