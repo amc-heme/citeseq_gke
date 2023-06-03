@@ -83,7 +83,8 @@ wildcard_constraints:
 rule fastp:
     input:
       R1 = _get_fq1_paths,
-      R2 = _get_fq2_paths
+      R2 = _get_fq2_paths,
+      fa = FASTP_ADAPTERS
     output:
         H1 = RESULTS+"/fastp/{fastq}.html",
         J1 = RESULTS+"/fastp/{fastq}.json"
@@ -100,7 +101,7 @@ rule fastp:
         -h {output.H1} \
         -j {output.J1} \
         -w 3 -p -b 31 -B 151 \
-        --adapter_fasta {FASTP_ADAPTERS} \
+        --adapter_fasta {input.fa} \
         --overlap_len_require 32
       """
 
