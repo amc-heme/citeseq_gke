@@ -19,6 +19,7 @@ FASTQS =        config["FASTQS"]
 CAPTURES =      config["CAPTURES"]
 WHITELIST_V2 =  config["WHITELIST_V2"]
 WHITELIST_V3 =  config["WHITELIST_V3"]
+FASTP_ADAPTERS = config["FASTP_ADAPTERS"]
 SAMPLES_DF =    pd.read_csv(FASTQS, sep = "\t")
 CAPTURES_DF =   pd.read_csv(CAPTURES, sep = "\t")
 
@@ -31,6 +32,8 @@ rule all:
       # generate dropkick h5ad
       expand("{results}/dropkick/{sample}_dropkick.h5ad", results = RESULTS, sample = GEX),
       # generate dropkick qc
-      expand("{results}/dropkick/{sample}-qc.png", results = RESULTS, sample = GEX)
+      expand("{results}/dropkick/{sample}-qc.png", results = RESULTS, sample = GEX),
+      # run fastp once per library
+      expand("{results}/fastp/{fastq}.html", results = RESULTS, fastq = SAMPLES_DF.basename)
 
 include: "rules/cutadapt_star.snake"
