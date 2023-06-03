@@ -33,7 +33,7 @@ rule all:
       expand("{results}/dropkick/{sample}_dropkick.h5ad", results = RESULTS, sample = GEX),
       # generate dropkick qc
       expand("{results}/dropkick/{sample}-qc.png", results = RESULTS, sample = GEX),
-      # run fastp once per library
+      # run fastp on each FASTQ pair
       expand("{results}/fastp/{fastq}.html", results = RESULTS, fastq = SAMPLES_DF.basename)
 
 include: "rules/cutadapt_star.snake"
