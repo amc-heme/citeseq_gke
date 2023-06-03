@@ -5,9 +5,10 @@ def _get_fq1_paths(wildcards):
     try:
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == wildcards.lib) & (SAMPLES_DF.capture == wildcards.sample)]
     except AttributeError:
-      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
-    except AttributeError:
-      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.basename == wildcards.fastq)]
+      try:
+        samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
+      except AttributeError:
+        samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.basename == wildcards.fastq)]
 
     fq1s = map(lambda x: os.path.join(DATA, x), samples_filtered.fastq1)
     fq1s = list(fq1s)
@@ -18,9 +19,10 @@ def _get_fq2_paths(wildcards):
     try:
       samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == wildcards.lib) & (SAMPLES_DF.capture == wildcards.sample)]
     except AttributeError:
-      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
-    except AttributeError:
-      samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.basename == wildcards.fastq)]
+      try:
+        samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.lib_type == "gex") & (SAMPLES_DF.capture == wildcards.sample)]
+      except AttributeError:
+        samples_filtered = SAMPLES_DF[(SAMPLES_DF.exclude == 0) & (SAMPLES_DF.basename == wildcards.fastq)]
 
     fq2s = map(lambda x: os.path.join(DATA, x), samples_filtered.fastq2)
     fq2s = list(fq2s)
