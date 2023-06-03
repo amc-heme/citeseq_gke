@@ -90,7 +90,7 @@ rule fastp:
     params:
       job_name = "fastp"
     log: "logs/{fastq}_fastp.out"
-    threads: 4
+    threads: 3
     conda: "../env_files/fastp.yml"
     shell:
       """
@@ -99,7 +99,7 @@ rule fastp:
         -I {input.R2} \
         -h {output.H1} \
         -j {output.J1} \
-        -w 4 -p -b 31 -B 151 \
+        -w 3 -p -b 31 -B 151 \
         --adapter_fasta {FASTP_ADAPTERS} \
         --overlap_len_require 32
       """
