@@ -3,4 +3,5 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
+  - conda-forge::libdeflate=1.13
   - bioconda::fastp=0.23.4
