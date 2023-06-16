@@ -15,4 +15,4 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.who-to-greet }}
-    - ${{ GCP_SA_EMAIL }}
+    - ${{ secrets.GCP_SA_EMAIL }}
