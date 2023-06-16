@@ -1,16 +1,18 @@
 # action.yml
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Snakemake GKE Action'
+description: 'Run Snakemake on GKE on the respository'
 inputs:
   who-to-greet:  # id of input
     description: 'Who to greet'
     required: true
     default: 'World'
+
 outputs:
   time: # id of output
-    description: 'The time we greeted you'
+    description: 'GCP EMAIL ECHO'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.who-to-greet }}
+    - ${{ GCP_SA_EMAIL }}

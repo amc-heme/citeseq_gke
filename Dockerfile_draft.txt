@@ -14,7 +14,7 @@ RUN gcloud components install kubectl --quiet
 RUN pip install kubernetes 
 
 #This will be replaced with the secrets file reference
-#COPY citeseq-SA-key.json /root/citeseq-SA-key.json 
+COPY citeseq-SA-key.json /root/citeseq-SA-key.json 
 
 
 ENV GOOGLE_APPLICATION_CREDENTIALS /root/citeseq-SA-key.json 
