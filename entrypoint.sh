@@ -20,4 +20,4 @@ GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/service_account_key.json
 
 echo "SERVICE_ACCOUNT_KEY: $SERVICE_ACCOUNT_KEY" 
 
-~/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
+/root/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
