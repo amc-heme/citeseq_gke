@@ -2,16 +2,16 @@
 name: 'Snakemake GKE Action'
 description: 'Run Snakemake on GKE on the respository'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  sa_key:  # id of input
+    description: 'echo fake key'
     required: true
     default: 'World'
 
 outputs:
   time: # id of output
-    description: 'GCP EMAIL ECHO'
+    description: 'INFORMATIONAL ECHO'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.who-to-greet }}
+    - ${{ inputs.sa_key }}

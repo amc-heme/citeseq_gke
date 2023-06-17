@@ -11,7 +11,8 @@ SERVICE_ACCOUNT="citeseq-pipeline-sa@prj-dev-bio-sandbox.iam.gserviceaccount.com
 
 #Complete this for Github custom action
 #SERVICE_ACCOUNT_KEY=$1
-#echo $SERVICE_ACCOUNT_KEY > service_account_key.json
+#echo $SERVICE_ACCOUNT_KEY > /github/workspace/service_account_key.json
+#GOOGLE_APPLICATION_CREDENTIALS=/github/workspace/citeseq-SA-key.json
 #gcloud auth activate-service-account --key-file=service_account_key.json
 
 gcloud container clusters create $CLUSTER_NAME \

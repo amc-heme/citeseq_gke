@@ -9,11 +9,11 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Hello world action step
+      - name: CUSTOM ACTION STEP
         uses: ./ # Uses an action in the root directory
-        id: hello
+        id: snakemake_gke_action_step
         with:
-          who-to-greet: ${{ secrets.GCP_SA_EMAIL }}
-      # Use the output from the `hello` step
+          sa_key: "iodfj084lkjLHK30slkj"
+      # Use the output from the `snakemake_gke_action_step` step
       - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+        run: echo "The time was ${{ steps.snakemake_gke_action_step.outputs.time }}"
