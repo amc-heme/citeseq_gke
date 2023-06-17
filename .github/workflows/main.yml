@@ -15,7 +15,8 @@ jobs:
         uses: ./ # Uses an action in the root directory
         id: snakemake_gke_action_step
         with:
-          sa_key: "iodfj084lkjLHK30slkj"
+          sa_test_key: "iodfj084lkjLHK30slkj"
+          sa_key: ${{ secrets.CITESEQ_SA_KEY }}
       # Use the output from the `snakemake_gke_action_step` step
       - name: Get the output time
         run: echo "The time was ${{ steps.snakemake_gke_action_step.outputs.time }}"
