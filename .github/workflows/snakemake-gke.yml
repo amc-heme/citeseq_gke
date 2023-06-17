@@ -1,4 +1,4 @@
-name: CITE-Seq Snakemake GKE Pipeline Action
+name: Workload Identity Federation Snakemake Draft Action
 #run-name: Deploy to ${{ github.action_path }} by @${{ github.actor }}
 on:
   #push:
