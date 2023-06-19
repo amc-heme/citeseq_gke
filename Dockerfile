@@ -9,7 +9,7 @@ RUN apt-get update
 RUN curl -sSL https://sdk.cloud.google.com > /tmp/gcl && bash /tmp/gcl --disable-prompts
 
 #Kubernetes components required
-RUN ~/google-cloud-sdk/bin/gcloud components install kubectl --quiet
+RUN /root/google-cloud-sdk/bin/gcloud components install kubectl --quiet
 RUN pip install kubernetes 
 
 RUN ls -alh

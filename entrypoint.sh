@@ -18,6 +18,4 @@ printf '%s' "$1" > $GITHUB_WORKSPACE/service_account_key.json
 
 #GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/service_account_key.json
 
-gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
-
-echo $GOOGLE_APPLICAITON_CREDENTIALS
+/root/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
