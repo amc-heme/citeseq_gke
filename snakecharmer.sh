@@ -9,11 +9,12 @@ PROJECT="prj-dev-bio-sandbox"
 BUCKET="bkt-test-926"
 SERVICE_ACCOUNT="citeseq-pipeline-sa@prj-dev-bio-sandbox.iam.gserviceaccount.com"
 
+#copied from the snakemake action
+mkdir -p /github/workspace/.conda
+
 #Complete this for Github custom action
-#SERVICE_ACCOUNT_KEY=$1
-#echo $SERVICE_ACCOUNT_KEY > /github/workspace/service_account_key.json
-#GOOGLE_APPLICATION_CREDENTIALS=/github/workspace/citeseq-SA-key.json
-#gcloud auth activate-service-account --key-file=service_account_key.json
+printf '%s' "$1" > $GITHUB_WORKSPACE/service_account_key.json
+gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
 
 gcloud container clusters create $CLUSTER_NAME \
     --zone=$ZONE \
@@ -36,4 +37,4 @@ gcloud container clusters get-credentials --zone=$ZONE --project $PROJECT $CLUST
 snakemake --kubernetes --use-conda --default-remote-provider GS --default-remote-prefix $BUCKET -j 999
 
 #bye bye cluster!
-gcloud container clusters delete --zone=$ZONE --project $PROJECT --quiet $CLUSTER_NAME 
+gcloud container clusters delete --zone=$ZONE --project $PROJECT --quiet $CLUSTER_NAME
