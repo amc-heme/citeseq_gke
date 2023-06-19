@@ -14,10 +14,10 @@ mkdir -p /github/workspace/.conda
 
 
 #Complete this for Github custom action
-SERVICE_ACCOUNT_KEY=$1
-echo $SERVICE_ACCOUNT_KEY > $GITHUB_WORKSPACE/service_account_key.json
-GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/service_account_key.json
+printf '%s' "$1" > $GITHUB_WORKSPACE/service_account_key.json
 
-#echo "SERVICE_ACCOUNT_KEY: $SERVICE_ACCOUNT_KEY" 
+#GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/service_account_key.json
 
-/root/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
+gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
+
+echo $GOOGLE_APPLICAITON_CREDENTIALS

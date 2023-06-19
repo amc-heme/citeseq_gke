@@ -1,7 +1,7 @@
 FROM snakemake/snakemake 
 
 #Set env variables
-ENV PATH $PATH:/github/workspace/google-cloud-sdk/bin 
+ENV PATH $PATH:/root/google-cloud-sdk/bin 
 ENV CONDA_ENVS_PATH /github/workspace/.conda
 
 RUN apt-get update 
