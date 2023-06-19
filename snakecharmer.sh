@@ -16,6 +16,8 @@ mkdir -p /github/workspace/.conda
 printf '%s' "$1" > $GITHUB_WORKSPACE/service_account_key.json
 gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
 
+export GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/service_account_key.json
+
 gcloud container clusters create $CLUSTER_NAME \
     --zone=$ZONE \
     --num-nodes=1 \
