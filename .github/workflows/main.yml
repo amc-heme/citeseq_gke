@@ -11,6 +11,13 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+          credentials_json: ${{ secrets.CITESEQ_SA_KEY }}
+
       - name: Snakemake GKE Custom Action
         uses: ./ # Uses an action in the root directory
         id: snakemake_gke_action_step

@@ -13,9 +13,9 @@ SERVICE_ACCOUNT="citeseq-pipeline-sa@prj-dev-bio-sandbox.iam.gserviceaccount.com
 mkdir -p /github/workspace/.conda
 
 #Complete this for Github custom action
-printf '%s' "$1" > $GITHUB_WORKSPACE/service_account_key.json
-gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
-export GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/service_account_key.json
+#printf '%s' "$1" > $GITHUB_WORKSPACE/service_account_key.json
+#gcloud auth activate-service-account --key-file=$GITHUB_WORKSPACE/service_account_key.json
+#export GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/service_account_key.json
 
 #Add git exception for github action
 git config --global --add safe.directory /github/workspace
