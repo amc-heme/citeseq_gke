@@ -3,7 +3,7 @@ name: 'Snakemake GKE Action'
 description: 'Run Snakemake on GKE on the respository'
 inputs:
   sa_key:  # id of input
-    description: 'echo fake key'
+    description: 'security key'
     required: true
     default: 'World'
 
